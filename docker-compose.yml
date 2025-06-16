@@ -1,0 +1,27 @@
+services:
+  orders:
+    build:
+      context: ./orders
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+    depends_on:
+      - redis
+
+  payments:
+    build:
+      context: ./payments
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - PORT=8081
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
