@@ -9,11 +9,10 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/gorilla/mux"
-
-	"payments/models"
+	"github.com/ovaam/online_shop/payments/models"
 )
 
-var accounts = make(map[string]Account)
+var accounts = make(map[string]models.Account)
 
 func printWelcome() {
 	color.Cyan(`
@@ -61,7 +60,7 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 
 // Обновляем обработчики
 func createAccountHandler(w http.ResponseWriter, r *http.Request) {
-	var account Account
+	var account models.Account
 	if err := json.NewDecoder(r.Body).Decode(&account); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return

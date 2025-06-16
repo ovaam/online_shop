@@ -9,11 +9,10 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/gorilla/mux"
-
-	"./models"
+	"github.com/ovaam/online_shop/orders/models"
 )
 
-var orders = make(map[string]Order)
+var orders = make(map[string]models.Order)
 
 func printWelcome() {
 	color.Cyan(`
@@ -63,7 +62,7 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 
 // Обновляем обработчики
 func createOrderHandler(w http.ResponseWriter, r *http.Request) {
-	var order Order
+	var order models.Order
 	if err := json.NewDecoder(r.Body).Decode(&order); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
@@ -71,7 +70,7 @@ func createOrderHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Генерируем ID (в реальном приложении используйте UUID)
 	order.ID = "ord_" + strconv.Itoa(len(orders)+1)
-	order.Status = StatusNew
+	order.Status = models.StatusNew
 
 	orders[order.ID] = order
 	color.Green("Created new order: %s", order.ID)
@@ -81,7 +80,7 @@ func createOrderHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func listOrdersHandler(w http.ResponseWriter, r *http.Request) {
-	var orderList []Order
+	var orderList []models.Order
 	for _, order := range orders {
 		orderList = append(orderList, order)
 	}
